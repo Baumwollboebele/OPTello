@@ -1,4 +1,7 @@
 import cv2
+from tello_controller import Tello
+
+
 
 BODY_PARTS = { "Nose": 0, "Neck": 1, "RShoulder": 2, "RElbow": 3, "RWrist": 4,
                    "LShoulder": 5, "LElbow": 6, "LWrist": 7, "RHip": 8, "RKnee": 9,
@@ -20,8 +23,11 @@ weights_file ="/Users/syntax_error/GitHub/op_tello/models/pose/coco/pose_iter_44
 #Read the neural network into memory
 neural_network = cv2.dnn.readNetFromCaffe(proto_file,weights_file)
 
-cap = cv2.VideoCapture(0)
+#tello drone
+#cap = cv2.VideoCapture ('udp://@:11111')
+#tello = Tello('',8889)
 
+cap = cv2.VideoCapture(0)
 """
 The output is a 4D matrix :
 
@@ -38,6 +44,7 @@ The fourth dimension is the width of the output map.
 """
 
 while True:
+    
     ret, frame = cap.read()
     frame_width = frame.shape[1]
     frame_height = frame.shape[0]

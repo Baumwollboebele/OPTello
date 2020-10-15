@@ -17,6 +17,7 @@ class Tello:
         self.local_ip = local_ip
         self.local_port = local_port
         self.local_video_port = 11111
+        
 
         self.tello_address = ("192.168.10.1", 8889)
 
@@ -24,19 +25,12 @@ class Tello:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self.local_ip, self.local_port))
 
-        self.socket_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind((self.local_ip,self.local_video_port))
-
         self.socket.sendto(b"command",self.tello_address)
         self.socket.sendto(b"streamon",self.tello_address)
 
         self.response_thread = threading.Thread(target=self._response_thread)
         self.response_thread.daemon = True
         self.response_thread.start()
-
-        self.battery_thread = threading.Thread(target=self._battery_thread)
-        self.battery_thread.daemon = True
-        self.battery_thread.start()
 
         self.response = None 
 
@@ -56,17 +50,6 @@ class Tello:
                 self.response, _ = self.socket.recvfrom(3000)
             except socket.error as e:
                 print(f"Error: {e}")
-
-    def _battery_thread(self):
-        """
-        Checks the battery level.
-        If the battery level gets low the drone will be forced to land.
-        """
-        while True:
-            if self.get_battery_status() < self.MIN_BATTERY_LEVEL:
-                self.land()
-            time.sleep(20)
-
 
     def send_command(self, command):
         """
