@@ -7,3 +7,4 @@ models/pose/body_25/pose_iter_584000.caffemodel
 models/pose/coco/pose_iter_440000.caffemodel
 models/pose/mpi/pose_iter_160000.caffemodel
 capture.jpg
+.DS_Store
